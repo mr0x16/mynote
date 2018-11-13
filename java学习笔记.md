@@ -78,6 +78,19 @@ public Fi1elnputStream(String name) throws FileNotFoundException
 
 需要做的只是定义一个派生于Exception 的类，或者派生于 Exception 子类的类。
 
+```java
+class FileFormatExcaption extends IOException {
+    public FileFormatExcaption() {}
+    public FileFormatExcaption(String gripe) {
+        
+    }
+}
+```
+
+
+
+
+
 
 
 
