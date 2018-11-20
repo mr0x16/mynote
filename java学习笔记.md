@@ -87,11 +87,99 @@ class FileFormatExcaption extends IOException {
 }
 ```
 
+现在，可以抛出自己的异常了
+
+```java
+String readData(BufferedReader in) throws FileFormatException {
+    more code;
+    while(condition) {
+        if (ch == -1) {
+            if(n < len) 
+                throw new FileFormatException();
+        } //EOF encountered
+            
+    }
+}
+```
 
 
 
+### 捕获异常
 
+**如果某个异常发生的时候没有在任何地方进行捕获，那么程序就会终止执行**
 
+通过try/catch语句块可以捕获异常
 
+```java
+try {
+    code；
+    more code；
+    more code;
+} catch (ExceptionType e) {
+    handler for this type;
+}
+```
 
+需要注意的是，放不知道对异常应该如何处理时，应该将异常抛出给调用者，让调用者决定如何处理异常。传递一个异常的话，在方法头部添加`throws`说明符就好。
 
+当有**多个**异常需要捕获时可以使用多个catch子句，例如
+
+```java
+try {
+    code that might throw exceptions;
+} catch (FileNotFoundException e) {
+    emergency action for missingfiles;
+} catch (UnknowHostException e) {
+    emergency action for unknown hosts;
+} catch (IOException e) {
+    emergency action for all other I/O problems;
+}
+```
+
+要想获取异常对象更对的信息，可以使用`e.getMessage()`
+
+要想得到异常对象的实际类型，可以使用`e.getClass().getName()`
+
+java 7之后，可以在一个catch子句中捕捉多个异常，例如
+
+```java
+try {
+    code that might throw exceptions;
+} catch (FileNotFoundException | UnknowHostException e) {
+    emergency action for missing files and unknown hosts;
+} catch (IOException e) {
+    emergency action for all other I/O problems;
+}
+```
+
+注意当捕获的异常类型彼此之间**不存在子类关系**时才可以使用这一特性。
+
+> 捕获多个异常时，异常变量隐含为final变量
+
+### 再次抛出异常与异常链
+
+在catch子句中可以抛出一个异常，这样做的目的是改变异常的类型。下面是一个捕获异常并再次抛出的基本用法
+
+```java
+try {
+    access the database;
+} catch (SQLException e) {
+    throw now ServletException("database error: " + e.getMessage());
+}
+```
+
+还有一种更好的处理方法，并且将原始异常设置为新异常的“原因”
+
+```java
+try {
+    access the database;
+} catch (SQLException e) {
+    Throwable se = new ServletException("database error");
+    se,initCause(e);
+    throw se;
+}
+```
+
+此时，当捕获这个异常时，可以使用`Throwable e = se.getCause()`来重新得到原始异常
+
+这样的方式可以让用户抛出高级异常，而不会丢失原始异常的细节。
