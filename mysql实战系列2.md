@@ -10,7 +10,7 @@
 
 ### 隔离性与隔离级别
 
-**ACID** (Atomicity, Consistency, Isolation, Durability，也就是原子性、一致性、隔离性、本次要讨论的是隔离性
+**ACID** (Atomicity, Consistency, Isolation, Durability，也就是原子性、一致性、隔离性、持久性，本次要讨论的是隔离性
 
 当数据库上有多个事务同时执行的时候，就有可能出现脏读(dirty read)，不可重复读(nonreapeatable read)， 幻读(phantom read)等问题，为了解决这些问题，就有了“隔离级别”的概念。
 
